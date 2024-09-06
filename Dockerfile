@@ -22,4 +22,6 @@ EXPOSE 8000
 
 # Start the Django application with the entrypoint script
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "attendance_project.wsgi:application"]
+
+# Run Django's development server
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
