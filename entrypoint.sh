@@ -1,15 +1,13 @@
 #!/bin/sh
 
+# Wait for the database to be ready
+# You might need to install 'wait-for-it' or a similar script if necessary
 echo "Waiting for database to be ready..."
+sleep 10
 
-while ! nc -z db_host 5432; do
-  echo "Waiting for the database to be available..."
-  sleep 1
-done
-
-echo "Database is ready!"
-
+# Run migrations
 echo "Running migrations..."
 python manage.py migrate
 
+# Start the server
 exec "$@"

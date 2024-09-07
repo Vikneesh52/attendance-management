@@ -1,27 +1,22 @@
-# Use the official Python image
-FROM python:3.11-slim
+# Use the official Python image as the base image
+FROM python:3.10-slim
 
-# Set the working directory
+# Set the working directory in the container
 WORKDIR /app
 
-# Copy the requirements file
+# Copy the requirements.txt file and install the dependencies
 COPY requirements.txt .
-
-# Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application code
+# Copy the entire project into the container
 COPY . .
 
-# Copy the entrypoint script
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+# Expose the port your application will run on
+EXPOSE 8085
 
-# Expose port 8000 for the application
-EXPOSE 8000
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
-# Start the Django application with the entrypoint script
-ENTRYPOINT ["/entrypoint.sh"]
-
-# Run Django's development server
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# Run Django migrations and start the Django development server in one command
+CMD ["sh", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:8085"]
